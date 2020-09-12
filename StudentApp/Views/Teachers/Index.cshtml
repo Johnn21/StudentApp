@@ -1,0 +1,219 @@
+﻿@model StudentApp.ViewModel.TeacherHomeViewModel
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<h2>List of Students</h2>
+
+<div class="w3-container" style="margin-top:50px;margin-bottom:50px;">
+
+    <button id="AllStudents" class="w3-button w3-black w3-mobile">All Students</button>
+    <button id="YearOne" value="1" class="w3-button w3-black w3-mobile">Year 1</button>
+    <button id="YearTwo" value="2" class="w3-button w3-black w3-mobile">Year 2</button>
+    <button id="YearThree" value="3" class="w3-button w3-black w3-mobile">Year 3</button>
+    <button id="YearFour" value="4" class="w3-button w3-black w3-mobile">Year 4</button>
+</div>
+
+<ul id="demo"></ul>
+
+<h3 id="TableTitle"></h3>
+
+<table id="students" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+    <tbody id="studentsBody">
+
+    </tbody>
+</table>
+
+
+
+<script>
+    $(document).ready(function () {
+
+
+        var AllStudents = $('#AllStudents');
+        var YearOne = $('#YearOne');
+        var YearTwo = $('#YearTwo');
+        var YearThree = $('#YearThree');
+        var YearFour = $('#YearFour');
+
+        var $demo = $('#demo');
+
+        var table = $("#students");
+        var tableBody = $("#studentsBody");
+        var TableTitle = $('#TableTitle');
+
+        function DisplayYearOne() {
+
+            tableBody.empty();
+
+            $.ajax({
+
+                type: 'GET',
+                url: '/api/StudentsYear/GetStudentByYear/' + YearOne.val(), 
+                success: function (students) {
+                    var row;
+                    $.each(students, function (i, item) {
+
+                        row += "<tr><td>" + item.Name + "</td>"
+                            + "<td>" + item.Class + "</td><td><a href='/teachers/details?id= " + item.Id + "  ' class='btn btn-primary'>Add Grade</a></td></tr>"
+
+                    });
+
+                    table.append(row);
+                    TableTitle.html("Year One");
+                }
+            });
+
+        }
+
+        function DisplayYearTwo() {
+
+            tableBody.empty();
+
+            $.ajax({
+
+                type: 'GET',
+                url: '/api/StudentsYear/GetStudentByYear/' + YearTwo.val(), 
+                success: function (students) {
+                    var row;
+                    $.each(students, function (i, item) {
+
+                        row += "<tr><td>" + item.Name + "</td>"
+                            + "<td>" + item.Class + "</td><td><a href='/teachers/details?id= " + item.Id + "  ' class='btn btn-primary'>Add Grade</a></td></tr>"
+
+                    });
+
+                    table.append(row);
+                    TableTitle.html("Year Two");
+                },
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+
+        }
+
+        function DisplayYearThree() {
+
+            tableBody.empty();
+
+            $.ajax({
+
+                type: 'GET',
+                url: '/api/StudentsYear/GetStudentByYear/' + YearThree.val(), 
+                success: function (students) {
+                    var row;
+                    $.each(students, function (i, item) {
+
+                        row += "<tr><td>" + item.Name + "</td>"
+                            + "<td>" + item.Class + "</td><td><a href='/teachers/details?id= " + item.Id + "  ' class='btn btn-primary'>Add Grade</a></td></tr>"
+
+                    });
+
+                    table.append(row);
+                    TableTitle.html("Year Three");
+                }
+            });
+
+        }
+
+        function DisplayYearFour() {
+
+            tableBody.empty();
+
+            $.ajax({
+
+                type: 'GET',
+                url: '/api/StudentsYear/GetStudentByYear/' + YearFour.val(), 
+                success: function (students) {
+                    var row;
+                    $.each(students, function (i, item) {
+
+                        row += "<tr><td>" + item.Name + "</td>"
+                            + "<td>" + item.Class + "</td><td><a href='/teachers/details?id= " + item.Id + "  ' class='btn btn-primary'>Add Grade</a></td></tr>"
+
+                    });
+
+                    table.append(row);
+                    TableTitle.html("Year Four");
+                }
+            });
+
+        }
+
+        YearOne.on('click', function () {
+            DisplayYearOne();
+        });
+
+        YearTwo.on('click', function () {
+            DisplayYearTwo();
+        });
+
+        YearThree.on('click', function () {
+            DisplayYearThree();
+        });
+
+        YearFour.on('click', function () {
+            DisplayYearFour();
+        });
+
+        function DisplayAllStudents() {
+            tableBody.empty();
+
+            $.ajax({
+
+                type: 'GET',
+                url: '/api/students',
+                success: function (students) {
+                    var row;
+                    $.each(students, function (i, item) {
+                        // row += "<tr><td> " + item.Name + "</td>" + "<td>" + item.Class + "<td></tr>"
+                       // row += "<tr><td><a href='/students/details?id=" + item.Id + " '> " + item.Name + "</a></td>" + "<td>" + item.Class + "</td></tr>"
+                        row += "<tr><td>" + item.Name + "</td>"
+                            + "<td>" + item.Class + "</td><td><a href='/teachers/details?id= " + item.Id + "  ' class='btn btn-primary'>Add Grade</a></td></tr>"
+                    });
+                    table.append(row);
+                    TableTitle.html("All Students");
+                },
+
+                error: function () {
+                    alert('error');
+                }
+
+
+            });
+        }
+
+
+        DisplayAllStudents();
+
+        AllStudents.on('click', function () {
+
+            DisplayAllStudents();
+
+        });
+
+
+
+
+
+
+
+    });
+</script>

@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "Messages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<h2 style="margin-top:50px;margin-bottom:50px;">Messages</h2>
+
+<table id="contests" class="table table-striped">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>Response</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#contests');
+
+        $.ajax({
+
+            url: '/api/responsecontests/getresponses',
+            type: 'GET',
+            success: function (responses) {
+                var row;
+                $.each(responses, function (i, item) {
+
+                    row += "<tr><td>" + item.Teacher.Name + "</td><td>" + item.Body + "</td><td><button data-id='"+item.Id+"' class='btn btn-danger deleteResponse'>Delete</button></td></tr>"
+                });
+                table.append(row);
+            },  
+            error: function () {
+                alert('error');
+            }
+
+        });
+
+
+        table.on("click", ".deleteResponse", function () {
+
+            var button = $(this);
+
+            var r = confirm("Are you sure?");
+            if (r == true) {
+
+                $.ajax({
+                    url: '/api/responsecontests/deleteresponse/' + button.attr("data-id"),
+                    type: 'DELETE',
+                    success: function () {
+                        button.parent().parent().remove();
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+                });
+
+            }
+
+        });
+
+        
+
+    });
+</script>

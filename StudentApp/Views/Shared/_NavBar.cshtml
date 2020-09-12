@@ -1,0 +1,41 @@
+﻿
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @if (this.User.IsInRole("Teacher"))
+            {
+                @Html.ActionLink("StudentApp", "Index", "Teachers", new { area = "" }, new { @class = "navbar-brand" })
+            }
+            else if (this.User.IsInRole("Student"))
+            {
+                @Html.ActionLink("StudentApp", "Index", "Students", new { area = "" }, new { @class = "navbar-brand" })
+            }
+            else
+            {
+                @Html.ActionLink("StudentApp", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            }
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+                @if (this.User.IsInRole("Teacher"))
+                {
+                    <li>@Html.ActionLink("Students List", "Index", "Teachers")</li>
+                    <li>@Html.ActionLink("Messages", "Messages", "Teachers")</li>
+                }
+                else if (this.User.IsInRole("Student"))
+                {
+                    <li>@Html.ActionLink("My Grades", "Index", "Students")</li>
+                    <li>@Html.ActionLink("Messages", "Messages", "Students")</li>
+                }
+                
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</div>

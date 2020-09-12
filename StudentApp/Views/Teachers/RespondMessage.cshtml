@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "RespondMessage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<h2 style="margin-top:50px;margin-bottom:50px;">Respond Message</h2>
+
+
+<div class="form-group">
+    <label for="body">Respond Here:</label><br />
+    <textarea cols="40" rows="5" id="body"></textarea>
+</div>
+
+<button id="responseBtn" class="btn btn-success" style="margin-top:10px;">Respond</button>
+
+<script>
+    $(document).ready(function () {
+
+        var responseBtn = $('#responseBtn');
+
+        responseBtn.on('click', function () {
+
+            var body = $('#body');
+
+            var response = {
+                body: body.val(),
+                contestId: @Model.Id,
+                teacherId: @Model.TeacherId,
+                studentId: @Model.StudentId,
+            };
+
+            $.ajax({
+
+                url: '/api/responsecontests/RespondContest',
+                type: 'POST',
+                data: response,
+                success: function () {
+                    window.location.replace('/teachers/messages');
+                },
+                error: function () {
+                    alert('error');
+                }
+
+            });
+
+        });
+
+    });
+</script>

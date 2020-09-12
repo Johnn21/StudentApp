@@ -1,0 +1,67 @@
+﻿@model StudentApp.Models.Grade
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<h2>Edit</h2>
+
+
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Value)
+    @Html.TextBoxFor(m => m.Value, new { @class = "form-control", @id = "value" })
+    @Html.ValidationMessageFor(m => m.Value)
+</div>
+
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Comment)
+    @Html.TextAreaFor(m => m.Comment, new { @class = "form-control", @id="comment" })
+    @Html.ValidationMessageFor(m => m.Comment)
+</div>
+
+<button class="btn btn-primary" id="editButton">Edit</button>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        var editButton = $('#editButton');
+
+        editButton.on('click', function () {
+
+            var Value = $('#value');
+            var Comment = $('#comment');
+
+            var grade = {
+                value: Value.val(),
+                comment: Comment.val(),
+                id: @Model.Id
+            };
+
+            $.ajax({
+                url: '/api/grades/',
+                type: 'PUT',
+                data: grade,
+                success: function () {
+                    window.location.replace('/teachers/details?id=' + @Model.StudentId)
+
+                },
+                error: function () {
+                    alert('error');
+                }
+            });
+
+            
+
+        });
+
+
+    });
+</script>

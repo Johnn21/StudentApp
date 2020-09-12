@@ -1,0 +1,53 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<h2 style="margin-top:50px;margin-bottom:50px;">My Grades</h2>
+
+<table id="Grades" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Value</th>
+            <th>Discipline</th>
+            <th>Posted At:</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#Grades');
+
+        $.ajax({
+            url: '/api/grades/GetStudentGrades/' + @Model.Id,
+            type: 'GET',
+            success: function (grades) {
+                var row;
+                $.each(grades, function (i, item) {
+                    row += "<tr><td>" + item.Value + "</td><td>" + item.Discipline.Name + "</td><td>" + item.DateAdded +
+                        "</td><td><a href='/students/gradedetails/?id=" + item.Id + " ' class='btn btn-primary'>Details</a></td></tr>"
+                });
+                table.append(row);
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+
+
+    });
+</script>
+
+
+

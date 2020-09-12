@@ -1,0 +1,163 @@
+﻿@model StudentApp.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Create a new account.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.DropDownListFor(m => m.RoleTypeId, new SelectList(Model.RoleTypes, "Id", "Name"), "Select Role", new { @class = "form-control", @id = "Drop", @style = "margin-left:210px;" })
+        @Html.ValidationMessageFor(m => m.RoleTypeId)
+    </div>
+
+
+    <div id="Student" hidden>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Student.Name, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Student.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Student.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @Html.DropDownList("SelectYear", new List<SelectListItem>
+             {
+                new SelectListItem{ Text="Year I", Value = "1" },
+                new SelectListItem{ Text="Year II", Value = "2" },
+                new SelectListItem{ Text="Year III", Value = "3" },
+                new SelectListItem{ Text="Year IV", Value = "4" }
+             }, "Select Year", new { @class = "form-control", @style = "margin-left:210px;", @id = "list" })
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Student.Sex, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10" style="margin-top:5px;">
+                <label>Male</label>
+                @Html.RadioButtonFor(m => m.Student.Sex, "Male")
+                <label>Female</label>
+                @Html.RadioButtonFor(m => m.Student.Sex, "Female")
+                @Html.ValidationMessageFor(model => model.Student.Sex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Student.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Student.Age, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Student.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div id='Teacher' hidden>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Teacher.Name, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Teacher.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Teacher.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            
+            @Html.DropDownListFor(m => m.Teacher.DisciplineId, new SelectList(Model.Disciplines, "Id", "Name"), "Choose Discipline", new { @class = "form-control", @style = "margin-left:210px;" })
+            @Html.ValidationMessageFor(m => m.Teacher.DisciplineId)
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Teacher.Sex, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10" style="margin-top:5px;">
+                <label>Male</label>
+                @Html.RadioButtonFor(m => m.Teacher.Sex, "Male")
+                <label>Female</label>
+                @Html.RadioButtonFor(m => m.Teacher.Sex, "Female")
+                @Html.ValidationMessageFor(model => model.Teacher.Sex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Teacher.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Teacher.Age, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Teacher.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Register" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#Drop').click(function () {
+
+            var a = $('#Drop :selected').text();
+
+            if (a == "Student") {
+                $('#Student').show();
+                $('#Teacher').hide();
+            } else if (a == "Teacher") {
+                $('#Student').hide();
+                $('#Teacher').show();
+            } else {
+                $('#Student').hide();
+                $('#Teacher').hide();
+            }
+
+
+        });
+
+
+
+    });
+</script>

@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Messages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<h2>Messages</h2>
+
+<table id="contests" class="table table-striped">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>Comment</th>
+            <th>Discipline</th>
+            <th>Respond</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/api/contests/getcontests',
+            type: 'GET',
+            success: function (contests) {
+                var row;
+                $.each(contests, function (i, item) {
+                    row += "<tr><td>" + item.Student.Name + "</td><td>" + item.Body + "</td><td>" + item.Discipline.Name +
+                        "</td><td><a href='/teachers/respondmessage/?id=" + item.Id +
+                        "' class='btn btn-primary'>Respond</a></td><td><button data-id='"+item.Id+"' class='btn btn-danger deleteContest'>Delete</button></td></tr>"
+                });
+                $('#contests').append(row);
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+
+        $('#contests').on("click", ".deleteContest", function () {
+
+            var button = $(this);
+
+            r = confirm("Are you sure?");
+
+            if (r == true) {
+
+                $.ajax({
+
+                    url: '/api/contests/deletecontest/' + button.attr('data-id'),
+                    type: 'DELETE',
+                    success: function () {
+                        button.parent().parent().remove();
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+            }
+
+        });
+
+    });
+</script>
+

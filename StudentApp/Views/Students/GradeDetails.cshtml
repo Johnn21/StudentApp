@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "GradeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+
+<h2 style="margin-top:50px;margin-bottom:50px;">Grade Details</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-lg-4">
+        <label for="comment">Teacher Comment</label>
+        <br />
+        <textarea cols="50" rows="5" id="comment" disabled></textarea>
+
+        <p id="teacher" style="margin-left:150px;"></p>
+    </div>
+    <div class="col-lg-offset-4">
+        <h3 id="grade"></h3>
+        <h3 id="discipline"></h3>
+    </div>
+</div>
+
+<hr />
+
+<h2 style="margin-top:30px;">Contest The Note</h2>
+
+<div class="form-group">
+    <textarea cols="50" rows="5" id="contestBody" class="form-control"></textarea>
+    <button style="margin-top:20px;" type="submit" id="contestBtn" class="btn btn-success">Add Contest</button>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        var contestBtn = $('#contestBtn');
+
+        contestBtn.on('click', function () {
+
+            var contestBody = $('#contestBody');
+
+            var contest = {
+                body: contestBody.val(),
+                teacherId: @Model.TeacherId,
+                studentId: @Model.StudentId,
+                gradeId: @Model.Id,
+                disciplineId: @Model.DisciplineId,
+            };
+
+            $.ajax({
+
+                url: '/api/contests/addcontest',
+                type: 'POST',
+                data: contest,
+                success: function () {
+                    alert('Posted');
+                },
+                error: function () {
+                    alert('Error');
+                }
+
+            });
+
+
+        });
+
+
+        $.ajax({
+            url: '/api/grades/getgrade/' + @ViewBag.id,
+            type: 'GET',
+            success: function (grade) {
+                $('#comment').append(grade.Comment);
+                $('#teacher').append("<strong>Posted by:<strong> " + grade.Teacher.Name);
+                $('#grade').append("Grade: " + grade.Value);
+                $('#discipline').append("Discipline: " + grade.Discipline.Name);
+            }
+
+        });
+
+    });
+</script>
+
+
+
+
